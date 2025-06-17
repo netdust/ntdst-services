@@ -74,7 +74,7 @@ abstract class Exporter {
     }
 
     protected function get_file_name( $graph ) {
-        return  wpinv_sanitize_key( "export-".$graph."_" . current_time( 'Y-m-d' ) );
+        return  sanitize_text_field( "export-".$graph."_" . current_time( 'Y-m-d' ) );
     }
 
     /**
