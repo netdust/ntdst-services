@@ -107,7 +107,7 @@ class Section
 	 *
 	 * @param string $name Group name.
 	 * @param string $slug Group slug.
-	 * @return \BracketSpace\Notification\Utils\Settings\Group
+	 * @return \Netdust\Services\Settings\Group
 	 * @throws \Exception Exception.
 	 */
 	public function addGroup($name, $slug)

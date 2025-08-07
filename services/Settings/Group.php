@@ -10,8 +10,6 @@ declare(strict_types=1);
 
 namespace Netdust\Services\Settings;
 
-use Netdust\Logger\Logger;
-
 /**
  * Group class
  */
@@ -53,18 +51,25 @@ class Group
 	private $description = '';
 
 	/**
-	 * Section slug
+	 * Group slug
 	 *
 	 * @var string
 	 */
 	private $section;
 
 	/**
-	 * Section collapsed
+	 * Group collapsed
 	 *
 	 * @var bool
 	 */
 	private $collapsed;
+
+    /**
+     * Group hide submit
+     *
+     * @var bool
+     */
+    private $hide_submit;
 
 	/**
 	 * Group constructor
@@ -151,7 +156,7 @@ class Group
 	 * Set or get description
 	 *
 	 * @param mixed $description string to set description, null to get it.
-	 * @return string|\BracketSpace\Notification\Utils\Settings\Group
+	 * @return string|\Netdust\Services\Settings\Group
 	 * String when using getter and Group when using setter
 	 */
 	public function description($description = null)
@@ -168,7 +173,7 @@ class Group
 	 * Set or get collapsed
 	 *
 	 * @param bool|null $collapsed Bool to set collapsed, null to get it.
-	 * @return bool|\BracketSpace\Notification\Utils\Settings\Group String when using getter and Group when using setter
+	 * @return bool|\Netdust\Services\Settings\Group String when using getter and Group when using setter
 	 */
 	public function collapsed($collapsed = null)
 	{
@@ -183,18 +188,44 @@ class Group
 	/**
 	 * Set collapsed alias
 	 *
-	 * @return \BracketSpace\Notification\Utils\Settings\Group $this
+	 * @return \Netdust\Services\Settings\Group $this
 	 */
 	public function collapse()
 	{
 		return $this->collapsed(true);
 	}
 
+    /**
+     * Set or get hide_submit
+     *
+     * @param bool|null $hide Bool to set collapsed, null to get it.
+     * @return bool|\Netdust\Services\Settings\Group String when using getter and Group when using setter
+     */
+    public function submit_hidden($hide = null)
+    {
+        if ($hide !== null) {
+            $this->hide_submit = $hide;
+            return $this;
+        }
+
+        return apply_filters($this->handle . '/settings/group/hide_submit', $this->hide_submit, $this);
+    }
+
+    /**
+     * Set hide_submit alias
+     *
+     * @return \Netdust\Services\Settings\Group $this
+     */
+    public function hide_submit()
+    {
+        return $this->submit_hidden(true);
+    }
+
 	/**
 	 * Add Field to the Group
 	 *
 	 * @param array<mixed> $args field args.
-	 * @return \BracketSpace\Notification\Utils\Settings\Group $this
+	 * @return \Netdust\Services\Settings\Group $this
 	 * @throws \Exception Exception.
 	 */
 	public function addField($args): Group
