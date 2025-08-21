@@ -1,0 +1,14 @@
+{
+    "components": {
+        "ntdst": {
+            "name": "netdust",
+            "general" : true,
+            "groups": {
+                "title": "@ntdst-title-*",
+                "card": "@ntdst-card-*"
+            },
+            "hover": "[class*='ntdst-']",
+            "inspect": "[class*='ntdst'], [class*='ntdst'] > *"
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "netdust": {
+        "version": "${netdust.version}"
+    },
+    "panels": {
+        "netdust-about": {
+            "priority": 100,
+            "title": "About"
+        },
+        "netdust-advanced": {
+            "priority": 90,
+            "title": "Advanced",
+            "width": 400
+        }
+    },
+    "sections": {
+        "netdust": {
+            "title": "Netdust",
+            "priority": 90,
+            "items": {
+                "netdust-advanced": "Advanced",
+                "netdust-about": "About"
+            }
+        }
+    }
+}

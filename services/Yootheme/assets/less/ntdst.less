@@ -1,0 +1,106 @@
+// Name:            Netdust
+// Description:     This is my custom component
+//
+// Component:       `ntdst`
+//
+// Sub-objects:     `ntdst-title`
+//                  `ntdst-card`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@ntdst-title-margin:                         40px;
+
+@ntdst-title-color:                          #ddd;
+
+@ntdst-title-font-family:                    @global-primary-font-family;
+@ntdst-title-font-weight:                    @global-primary-font-weight;
+@ntdst-title-text-transform:                 @global-primary-text-transform;
+@ntdst-title-letter-spacing:                 @global-primary-letter-spacing;
+@ntdst-title-font-style:                     @global-primary-font-style;
+
+@ntdst-title-text-shadow:                    none;
+
+@ntdst-card-background:                      @global-primary-background;
+
+@ntdst-card-box-shadow:                      none;
+
+@ntdst-card-border-mode:                     ~'';
+@ntdst-card-border-width:                    0;
+@ntdst-card-border:                          transparent;
+@ntdst-card-border-radius:                   0;
+
+@internal-ntdst-card-gradient:               ~'';
+
+
+/* ========================================================================
+   Component: Netdust
+ ========================================================================== */
+
+.ntdst-title {
+    margin-top: @ntdst-title-margin;
+    .hook-ntdst-title();
+}
+
+.ntdst-card {
+    background-color: @ntdst-card-background;
+    .hook-ntdst-card();
+}
+
+//
+// Following properties will only be set if they differ from their default value
+//
+
+// Color
+.hook-ntdst-title() when not (@ntdst-title-color = transparent) {
+    color: @ntdst-title-color;
+}
+
+// Typography
+.hook-ntdst-title() when not (@ntdst-title-font-family = inherit) {
+    font-family: @ntdst-title-font-family;
+}
+
+.hook-ntdst-title() when not (@ntdst-title-font-weight = inherit) {
+    font-weight: @ntdst-title-font-weight;
+}
+
+.hook-ntdst-title() when not (@ntdst-title-text-transform = inherit) {
+    text-transform: @ntdst-title-text-transform;
+}
+
+.hook-ntdst-title() when not (@ntdst-title-letter-spacing = inherit) {
+    letter-spacing: @ntdst-title-letter-spacing;
+}
+
+.hook-ntdst-title() when not (@ntdst-title-font-style = inherit) {
+    font-style: @ntdst-title-font-style;
+}
+
+// Shadows
+.hook-ntdst-title() when not (@ntdst-title-text-shadow = none) {
+    text-shadow: @ntdst-title-text-shadow;
+}
+
+.hook-ntdst-card() when not (@ntdst-card-box-shadow = none) {
+    box-shadow: @ntdst-card-box-shadow;
+}
+
+// Border
+.hook-ntdst-card() when not (@ntdst-card-border-width = 0) {
+    border@{ntdst-card-border-mode}: @ntdst-card-border-width solid @ntdst-card-border;
+}
+
+.hook-ntdst-card() when not (@ntdst-card-border-radius = 0) {
+    border-radius: @ntdst-card-border-radius;
+}
+
+// Background Gradient
+// Mind that variables prefixed with `internal` will not show up in the style customizer.
+
+.hook-ntdst-card() when not (@internal-ntdst-card-gradient = ~'') {
+    background-image: @internal-ntdst-card-gradient;
+}
