@@ -16,7 +16,7 @@ class Url
 	/**
 	 * Url field
 	 *
-	 * @param \BracketSpace\Notification\Utils\Settings\Field $field Field instance.
+	 * @param  $field  .
 	 * @return void
 	 */
 	public function input($field)

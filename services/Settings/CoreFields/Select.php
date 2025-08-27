@@ -18,7 +18,7 @@ class Select
 	 * You can define `multiple` addon to make it multiple
 	 * If you want to use Selectize.js, set `pretty` addon to true
 	 *
-	 * @param \BracketSpace\Notification\Utils\Settings\Field $field Field instance.
+	 * @param $field  .
 	 * @return void
 	 */
 	public function input($field)

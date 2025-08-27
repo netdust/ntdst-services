@@ -16,7 +16,7 @@ class Text
 	/**
 	 * Text field
 	 *
-	 * @param \BracketSpace\Notification\Utils\Settings\Field $field Field instance.
+	 * @param  $field  instance.
 	 * @return void
 	 */
 	public function input($field)

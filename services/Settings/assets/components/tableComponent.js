@@ -50,25 +50,34 @@ window.ntdst = window.ntdst || {};
                 this.attachListeners();
             },
 
-            searchChanged() {
-                clearTimeout(this.debounceTimer);
-                this.debounceTimer = setTimeout(() => {
-                    this.currentPage = 1;
-                    this.fetchData();
-                }, this.config.debounceDelay);
+            debouncedSearch() {
+                clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    const value = this.search;
+
+                    // Trigger search if empty OR at least 3 chars
+                    if (value.length === 0 || value.length >= 3) {
+                        this.fetchData();
+                    }
+                }, 500); // 300ms debounce
             },
 
             async fetchData() {
+
                 const fetchParams = {
                     page: this.currentPage,
                     per_page: this.perPage,
                     search: this.search,
                     filters: JSON.stringify(this.filters) // Include filters as JSON
                 };
-                if (this.lastFetchParams && JSON.stringify(fetchParams) === JSON.stringify(this.lastFetchParams) && !this.isLoading) {
+
+                const filtersChanged = JSON.stringify(this.filters) !== JSON.stringify(this.lastFetchParams?.filters || '{}');
+
+                if (!filtersChanged && this.search === this.lastFetchParams?.search && !this.isLoading) {
                     console.log('Skipping fetch: parameters unchanged');
                     return;
                 }
+
                 const cacheKey = JSON.stringify(fetchParams);
                 const cached = this.cache.get(cacheKey);
                 if (cached && Date.now() - cached.timestamp < this.config.cacheTTL) {
@@ -79,13 +88,16 @@ window.ntdst = window.ntdst || {};
                     this.isLoading = false;
                     return;
                 }
+
                 if (this.search.length > 0 && this.search.length < 3) {
                     return;
                 }
+
+
                 this.isLoading = true;
                 this.activePanelId = null;
                 this.lastFetchParams = fetchParams;
-                document.getElementById(this.config.tableContentId).innerHTML = '<p>Loading...</p>';
+
                 try {
                     const response = await fetch(this.config.ajaxUrl, {
                         method: 'POST',
@@ -199,13 +211,13 @@ window.ntdst = window.ntdst || {};
                 }
             },
 
-            async executeAction(actionName, itemId, event) {
+            async executeAction(actionName, data, event) {
                 if (this.config.actions[actionName]) {
                     try {
-                        const result = await this.config.actions[actionName](itemId, event, this);
+                        const result = await this.config.actions[actionName](data, event, this);
                         if (result.success) {
-                            this.closeAllPanels();
-                            this.fetchData();
+                            //this.closeAllPanels();
+                            //this.fetchData();
                         }
                     } catch (error) {
                         console.error(`Error executing action ${actionName}:`, error);

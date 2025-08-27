@@ -41,7 +41,18 @@
     border-top: 1px solid #d5e2ed;
     border-bottom: 1px solid #d5e2ed;
 }
-
+.ntdst-navigation-bar .nav-tab {
+    border:0;
+    margin:0;
+    background:none;
+    border-bottom:3px solid white;
+}
+.ntdst-navigation-bar .nav-tab-active {
+    border-bottom:3px solid #2a4b6d;
+}
+.ntdst-navigation-bar .nav-tab-wrapper {
+    border:0;
+}
 /**
  * Settings styles
  */

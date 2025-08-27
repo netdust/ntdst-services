@@ -21,6 +21,8 @@ class SettingsServiceProvider extends ServiceProvider
 		    'ajax_url' => admin_url('admin-ajax.php'),
 		    'panel_nonce' => wp_create_nonce('panel_nonce'),
 		    'table_nonce' => wp_create_nonce('table_nonce'),
+		    'status_nonce' => wp_create_nonce('status_nonce'),
+		    'action_nonce' => wp_create_nonce('action_nonce'),
 		    'cache_nonce' => wp_create_nonce('clear_cache_nonce'),
 	    ];
 
@@ -29,7 +31,27 @@ class SettingsServiceProvider extends ServiceProvider
 		    'alpinejs', $asset,  ['attr'=>['defer'=>true],'to'=>['admin']]
 	    );
 
+	    $asset = plugin_dir_url( __FILE__ ) . 'assets/settings.js';
+	    $this->container->get( AssetManager::class )->script(
+		    'settings-js', $asset,  ['ver'=>'0.1','deps'=>['alpinejs'],'to'=>['admin'],'localized'=>[
+			    'wpConfig',[
+				    'ajaxUrl' => $conf['ajax_url'],
+				    'panelNonce' => $conf['panel_nonce'],
+				    'tableNonce' => $conf['table_nonce'],
+				    'statusNonce' => $conf['status_nonce'],
+				    'actionNonce' => $conf['action_nonce'],
+				    'cacheNonce' => $conf['cache_nonce']
+			    ]]]
+	    );
 
+	    $asset = plugin_dir_url( __FILE__ ) . 'assets/components/actionComponent.js';
+	    $this->container->get( AssetManager::class )->script(
+		    'action-component', $asset,  ['ver'=>'0.1','deps'=>['alpinejs'],'to'=>['admin']]
+	    );
+	    $asset = plugin_dir_url( __FILE__ ) . 'assets/components/statusComponent.js';
+	    $this->container->get( AssetManager::class )->script(
+		    'status-component', $asset,  ['ver'=>'0.1','deps'=>['alpinejs'],'to'=>['admin']]
+	    );
 		$asset = plugin_dir_url( __FILE__ ) . 'assets/components/panelComponent.js';
 		$this->container->get( AssetManager::class )->script(
 			'panel-component', $asset,  ['ver'=>'0.1','deps'=>['alpinejs'],'to'=>['admin']]
@@ -39,16 +61,6 @@ class SettingsServiceProvider extends ServiceProvider
 			'table-component', $asset,  ['ver'=>'0.1','deps'=>['alpinejs'],'to'=>['admin']]
 		);
 
-	    $asset = plugin_dir_url( __FILE__ ) . 'assets/settings.js';
-	    $this->container->get( AssetManager::class )->script(
-		    'settings-js', $asset,  ['ver'=>'0.1','deps'=>['alpinejs', 'panel-component', 'table-component'],'to'=>['admin'],'localized'=>[
-			    'wpConfig',[
-				    'ajaxUrl' => $conf['ajax_url'],
-				    'panelNonce' => $conf['panel_nonce'],
-				    'tableNonce' => $conf['table_nonce'],
-				    'cacheNonce' => $conf['cache_nonce']
-			    ]]]
-	    );
 
 	    $asset = plugin_dir_url( __FILE__ ) . 'assets/components.css';
 	    $this->container->get( AssetManager::class )->style(

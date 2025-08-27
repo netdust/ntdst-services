@@ -17,7 +17,7 @@ class Image
 	 * Image Field field
 	 * Requires 'label' addon
 	 *
-	 * @param \BracketSpace\Notification\Utils\Settings\Field $field Field instance.
+	 * @param $field  .
 	 * @return void
 	 * @since 7.0.0
 	 */

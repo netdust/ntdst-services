@@ -9,19 +9,23 @@ window.ntdst = window.ntdst || {};
                 panelId: '',
                 open: true,
                 messageTimeout: 3000,
+                beforeSubmit: (form, formData, component) => {
+
+                },
                 onSubmitSuccess: (data, component) => {
-                    component.responseMessage = data.message || 'Success!';
-                    component.inputValue = '';
+                    component.success = true;
                 },
                 onSubmitError: (error, component) => {
                     component.responseMessage = error.message || 'Something went wrong';
+                    component.error = true;
                 },
                 ...config
             },
 
-            inputValue: '',
             responseMessage: '',
             loading: false,
+            success: false,
+            error: false,
 
 
             init() {
@@ -40,13 +44,15 @@ window.ntdst = window.ntdst || {};
 
             async submit(e) {
                 e.preventDefault();
-                if (!this.config.panelId) {
-                    this.responseMessage = 'Error: panelId is missing';
-                    return;
-                }
 
                 this.loading = true;
                 this.responseMessage = '';
+
+                if (!this.config.panelId) {
+                    this.loading = false;
+                    this.responseMessage = 'Error: panelId is missing';
+                    return;
+                }
 
                 const form = e.target.closest('form');
                 if (!form) {
@@ -56,17 +62,16 @@ window.ntdst = window.ntdst || {};
                 }
 
                 const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
+                formData.append('action', `${this.config.panelId}_submit`);
+                formData.append('nonce', this.config.nonce);
+
+                this.config.beforeSubmit(form, formData ,this);
 
                 try {
                     const response = await fetch(this.config.ajaxUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({
-                            action: `${this.config.panelId}_submit`,
-                            nonce: this.config.nonce,
-                            data: JSON.stringify(data)
-                        })
+                        body: new URLSearchParams(formData)
                     });
 
                     const json = await response.json();
@@ -80,13 +85,20 @@ window.ntdst = window.ntdst || {};
 
                     setTimeout(() => {
                         this.responseMessage = '';
+                        this.success = false;
+                        this.error = false;
                     }, this.config.messageTimeout);
+
                 } catch (error) {
                     this.loading = false;
                     this.config.onSubmitError({ message: 'Network error' }, this);
+
                     setTimeout(() => {
                         this.responseMessage = '';
+                        this.success = false;
+                        this.error = false;
                     }, this.config.messageTimeout);
+
                 }
             }
         };
