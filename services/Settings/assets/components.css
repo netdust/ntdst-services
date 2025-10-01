@@ -45,10 +45,11 @@
 }
 #posts-table {
     min-height:150px;
+    position: relative;
 }
 .loader {
     position: absolute;
-    top: 150px;
+    top: 50px;
     left:50%;
     color: #555;
     width: 50px;
@@ -82,4 +83,115 @@
     margin: 0;
     cursor: pointer;
 }
+/* container */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+/* toast message */
+.toast {
+    background: #f44336; /* red for error */
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.3s forwards, fadeOut 0.3s 4.5s forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+.multi-select {
+    position: relative;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.multi-select-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    min-height: 38px;
+    cursor: text;
+}
+
+.multi-select-box .tag {
+    display: inline-flex;
+    align-items: center;
+    background: #e6f0ff;
+    color: #004080;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.multi-select-box .tag .remove {
+    background: none;
+    border: none;
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: #004080;
+}
+
+.multi-select-box .input {
+    flex: 1;
+    min-width: 120px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.dropdown {
+    position: fixed; /* Changed from absolute */
+    z-index: 9999;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 2px;
+    max-height: 150px;
+    overflow-y: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    min-width: 200px; /* Add minimum width */
+}
+
+.dropdown-item {
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #f0f8ff;
+}
+
+.dropdown-item.create {
+    background: #f6fff6;
+    color: #006600;
+}
+.dropdown-item.create:hover {
+    background: #e0ffe0;
+}

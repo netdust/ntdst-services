@@ -1,36 +1,24 @@
 window.ntdst = window.ntdst || {};
 
 ((exports) => {
-    exports.panelComponent = (config = {}) => {
+    exports.panelComponent = (data = {}, config = {}) => {
         return {
+            ...exports.ajaxMixin(), // isLoading, status, success, error, ajaxRequest
+
             config: {
-                ajaxUrl: window.wpVars?.ajaxUrl || '',
-                nonce: window.wpVars?.panelNonce || '',
+                ajaxUrl: '',
+                nonce: '',
                 panelId: '',
                 open: true,
                 messageTimeout: 3000,
-                beforeSubmit: (form, formData, component) => {
-
-                },
-                onSubmitSuccess: (data, component) => {
-                    component.success = true;
-                },
-                onSubmitError: (error, component) => {
-                    component.responseMessage = error.message || 'Something went wrong';
-                    component.error = true;
-                },
+                beforeSend: null, // optional hook for global or panel-specific logic
+                afterResponse: null, // optional custom response handler
                 ...config
             },
 
-            responseMessage: '',
-            loading: false,
-            success: false,
-            error: false,
-
-
             init() {
                 if (!this.config.panelId) {
-                    console.error('panelManager: panelId is required in config');
+                    console.error('panelComponent: panelId is required in config');
                     return;
                 }
                 const stored = localStorage.getItem(`panel-open-${this.config.panelId}`);
@@ -45,63 +33,43 @@ window.ntdst = window.ntdst || {};
             async submit(e) {
                 e.preventDefault();
 
-                this.loading = true;
-                this.responseMessage = '';
-
                 if (!this.config.panelId) {
-                    this.loading = false;
-                    this.responseMessage = 'Error: panelId is missing';
+                    this.setError('panelId is missing');
                     return;
                 }
 
                 const form = e.target.closest('form');
                 if (!form) {
-                    this.loading = false;
-                    this.responseMessage = 'Error: Form not found';
+                    this.setError('Form not found');
                     return;
                 }
 
-                const formData = new FormData(form);
-                formData.append('action', `${this.config.panelId}_submit`);
-                formData.append('nonce', this.config.nonce);
-
-                this.config.beforeSubmit(form, formData ,this);
+                // Convert FormData to object
+                const dataObject = Object.fromEntries(new FormData(form).entries());
+                dataObject.action = `${this.config.panelId}_submit`;
+                dataObject.nonce = this.config.nonce;
 
                 try {
-                    const response = await fetch(this.config.ajaxUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams(formData)
+                    const result = await this.ajaxRequest({
+                        url: this.config.ajaxUrl,
+                        data: dataObject,
+                        beforeSend: this.config.beforeSend,
+                        afterResponse: this.config.afterResponse
                     });
 
-                    const json = await response.json();
-                    this.loading = false;
-
-                    if (json.success) {
-                        this.config.onSubmitSuccess(json.data, this);
-                    } else {
-                        this.config.onSubmitError(json.data || { message: 'Something went wrong' }, this);
+                    if (result) {
+                        this.success = true;
                     }
 
+                } catch (err) {
+                   //
+                } finally {
                     setTimeout(() => {
-                        this.responseMessage = '';
                         this.success = false;
                         this.error = false;
                     }, this.config.messageTimeout);
-
-                } catch (error) {
-                    this.loading = false;
-                    this.config.onSubmitError({ message: 'Network error' }, this);
-
-                    setTimeout(() => {
-                        this.responseMessage = '';
-                        this.success = false;
-                        this.error = false;
-                    }, this.config.messageTimeout);
-
                 }
             }
         };
     };
-
 })(window.ntdst);

@@ -23,7 +23,8 @@ class SettingsServiceProvider extends ServiceProvider
 		    'table_nonce' => wp_create_nonce('table_nonce'),
 		    'status_nonce' => wp_create_nonce('status_nonce'),
 		    'action_nonce' => wp_create_nonce('action_nonce'),
-		    'cache_nonce' => wp_create_nonce('clear_cache_nonce'),
+		    'select_nonce' => wp_create_nonce('select_nonce'),
+		    'cache_nonce' => wp_create_nonce('cache_nonce'),
 	    ];
 
 	    $asset = 'https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js';
@@ -40,6 +41,7 @@ class SettingsServiceProvider extends ServiceProvider
 				    'tableNonce' => $conf['table_nonce'],
 				    'statusNonce' => $conf['status_nonce'],
 				    'actionNonce' => $conf['action_nonce'],
+				    'selectNonce' => $conf['select_nonce'],
 				    'cacheNonce' => $conf['cache_nonce']
 			    ]]]
 	    );

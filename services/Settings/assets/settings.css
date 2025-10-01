@@ -277,3 +277,7 @@ p.ld-overview--more {
     }
 
 }
+
+table .highlight-today {
+    background:#e4f0fb !important;
+}

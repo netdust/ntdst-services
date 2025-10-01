@@ -35,7 +35,9 @@ class PostFilterServiceProvider extends ServiceProvider
                 $filter = $this->container->get( $atts['id'] );
                 $filter->query_args = $atts;
 
+
                 $filter->echo_template();
+
 
                 $html = ob_get_contents();
                 ob_end_clean();
